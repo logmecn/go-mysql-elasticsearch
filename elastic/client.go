@@ -58,7 +58,7 @@ func NewClient(conf *ClientConfig) *Client {
 type ResponseItem struct {
 	ID      string                 `json:"_id"`
 	Index   string                 `json:"_index"`
-	Type    string                 `json:"_type"`
+	//Type    string                 `json:"_type"`
 	Version int                    `json:"_version"`
 	Found   bool                   `json:"found"`
 	Source  map[string]interface{} `json:"_source"`
@@ -82,7 +82,7 @@ const (
 type BulkRequest struct {
 	Action   string
 	Index    string
-	Type     string
+	//Type     string
 	ID       string
 	Parent   string
 	Pipeline string
@@ -96,9 +96,9 @@ func (r *BulkRequest) bulk(buf *bytes.Buffer) error {
 	if len(r.Index) > 0 {
 		metaData["_index"] = r.Index
 	}
-	if len(r.Type) > 0 {
-		metaData["_type"] = r.Type
-	}
+	//if len(r.Type) > 0 {
+//		metaData["_type"] = r.Type
+//	}
 
 	if len(r.ID) > 0 {
 		metaData["_id"] = r.ID
@@ -160,7 +160,7 @@ type BulkResponse struct {
 // BulkResponseItem is the item in the bulk response.
 type BulkResponseItem struct {
 	Index   string          `json:"_index"`
-	Type    string          `json:"_type"`
+	//Type    string          `json:"_type"`
 	ID      string          `json:"_id"`
 	Version int             `json:"_version"`
 	Status  int             `json:"status"`
@@ -178,7 +178,7 @@ type MappingResponse struct {
 type Mapping map[string]struct {
 	Mappings map[string]struct {
 		Properties map[string]struct {
-			Type   string      `json:"type"`
+			//Type   string      `json:"type"`
 			Fields interface{} `json:"fields"`
 		} `json:"properties"`
 	} `json:"mappings"`

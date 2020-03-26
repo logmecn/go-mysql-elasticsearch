@@ -294,6 +294,7 @@ func (r *River) Run() error {
 
 	pos := r.master.Position()
 	if err := r.canal.RunFrom(pos); err != nil {
+		if strings.Contains(err.Error, "SAVEPOINT `trans2`"){return nil}
 		log.Errorf("start canal err %v", err)
 		canalSyncState.Set(0)
 		return errors.Trace(err)

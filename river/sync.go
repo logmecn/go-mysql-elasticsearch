@@ -187,7 +187,7 @@ func (r *River) makeRequest(rule *Rule, action string, rows [][]interface{}) ([]
 			}
 		}
 
-		req := &elastic.BulkRequest{Index: rule.Index, Type: rule.Type, ID: id, Parent: parentID, Pipeline: rule.Pipeline}
+		req := &elastic.BulkRequest{Index: rule.Index, ID: id, Parent: parentID, Pipeline: rule.Pipeline}
 
 		if action == canal.DeleteAction {
 			req.Action = elastic.ActionDelete
@@ -240,13 +240,13 @@ func (r *River) makeUpdateRequest(rule *Rule, rows [][]interface{}) ([]*elastic.
 			}
 		}
 
-		req := &elastic.BulkRequest{Index: rule.Index, Type: rule.Type, ID: beforeID, Parent: beforeParentID}
+		req := &elastic.BulkRequest{Index: rule.Index, ID: beforeID, Parent: beforeParentID}
 
 		if beforeID != afterID || beforeParentID != afterParentID {
 			req.Action = elastic.ActionDelete
 			reqs = append(reqs, req)
 
-			req = &elastic.BulkRequest{Index: rule.Index, Type: rule.Type, ID: afterID, Parent: afterParentID, Pipeline: rule.Pipeline}
+			req = &elastic.BulkRequest{Index: rule.Index, ID: afterID, Parent: afterParentID, Pipeline: rule.Pipeline}
 			r.makeInsertReqData(req, rule, rows[i+1])
 
 			esDeleteNum.WithLabelValues(rule.Index).Inc()
@@ -477,8 +477,8 @@ func (r *River) doBulk(reqs []*elastic.BulkRequest) error {
 		for i := 0; i < len(resp.Items); i++ {
 			for action, item := range resp.Items[i] {
 				if len(item.Error) > 0 {
-					log.Errorf("%s index: %s, type: %s, id: %s, status: %d, error: %s",
-						action, item.Index, item.Type, item.ID, item.Status, item.Error)
+					log.Errorf("%s index: %s,  id: %s, status: %d, error: %s",
+						action, item.Index, item.ID, item.Status, item.Error)
 				}
 			}
 		}
